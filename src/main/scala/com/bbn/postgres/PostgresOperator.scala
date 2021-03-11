@@ -5,7 +5,7 @@ import org.apache.spark.sql.functions.{col, expr, max}
 
 object PostgresOperator extends App {
 
-  val path = "/home/thesnibibin/Desktop/"
+  val path = "///"
 
   val spark = SparkSession.builder()
     .appName("PostgresOperator")
