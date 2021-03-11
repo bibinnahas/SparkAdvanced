@@ -1,9 +1,11 @@
 package com.bbn.postgres
 
-import org.apache.spark.sql.SparkSession
+import org.apache.spark.sql.{SaveMode, SparkSession}
 import org.apache.spark.sql.functions.{col, expr, max}
 
 object PostgresOperator extends App {
+
+  val path = "/home/thesnibibin/Desktop/"
 
   val spark = SparkSession.builder()
     .appName("PostgresOperator")
@@ -42,6 +44,48 @@ object PostgresOperator extends App {
   val bestPaidEmployeesDF = maxSalaryPerEmployee.orderBy(col("MaxSalary").desc).limit(10)
   val bestPaidJobsDF = bestPaidEmployeesDF.join(mostRecentJobTitlesDF, "emp_no")
 
-  bestPaidJobsDF.show()
+  //  bestPaidJobsDF.show()
+
+  case class Car(
+                  Name: String,
+                  Miles_per_Gallon: Option[Double],
+                  Cylinders: Long,
+                  Displacement: Double,
+                  Horsepower: Option[Long],
+                  Weight_in_lbs: Long,
+                  Acceleration: Double,
+                  Year: String,
+                  Origin: String
+                )
+
+  def readDF(filename: String) = spark.read
+    .option("inferSchema", "true")
+    .json(s"$path/$filename")
+
+  val carsDF = readDF("cars.json")
+  carsDF.createOrReplaceTempView("cars")
+  val americanCarsDF = spark.sql(
+    """
+      |select Name from cars where Origin = 'USA'
+    """.stripMargin)
+
+  def transferTables(tableNames: List[String], shouldWriteToWarehouse: Boolean = false) = tableNames.foreach { tableName =>
+    val tableDF = readTable(tableName)
+    tableDF.createOrReplaceTempView(tableName)
+
+    if (shouldWriteToWarehouse) {
+      tableDF.write
+        .mode(SaveMode.Overwrite)
+        .saveAsTable(tableName)
+    }
+  }
+
+  // we can run ANY SQL statement
+  spark.sql("create database rtjvm")
+  spark.sql("use rtjvm")
+  val databasesDF = spark.sql("show databases")
+
+
+  transferTables(List("salaries"), true)
 
 }

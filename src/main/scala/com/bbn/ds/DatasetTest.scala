@@ -2,11 +2,11 @@ package com.bbn.ds
 
 import java.sql.Date
 
-import org.apache.spark.sql.{DataFrame, Dataset, Encoder, Encoders, SparkSession}
+import org.apache.spark.sql.{DataFrame, Dataset, Encoders, SparkSession}
 
 object DatasetTest extends App {
 
-  val path = "///"
+  val path = "/home/thesnibibin/Desktop/"
 
   val spark = SparkSession.builder()
     .appName("Datasets")
@@ -22,7 +22,7 @@ object DatasetTest extends App {
   numbersDF.printSchema()
 
   //  convert a DF to a Dataset
-  implicit val intEncoder: Encoder[Int] = Encoders.scalaInt
+  implicit val intEncoder = Encoders.scalaInt
   val numberDs: Dataset[Int] = numbersDF.as[Int]
 
   numberDs.show()
