@@ -1,4 +1,4 @@
-# SparkDBConnTest
+# Advanced Spark Examples
 Advanced spark example
 - Spark program to read and manipulate postgres table
 - Spark program to try out Lag analytical capabilities of Dataset
