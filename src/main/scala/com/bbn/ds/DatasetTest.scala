@@ -3,10 +3,11 @@ package com.bbn.ds
 import java.sql.Date
 
 import org.apache.spark.sql.{DataFrame, Dataset, Encoders, SparkSession}
+import org.apache.spark.sql.functions._
 
 object DatasetTest extends App {
 
-  val path = "/home/thesnibibin/Desktop/"
+  val path = "/home/***/Desktop/"
 
   val spark = SparkSession.builder()
     .appName("Datasets")
@@ -57,5 +58,9 @@ object DatasetTest extends App {
   println(carsDS.filter(_.Horsepower.getOrElse(0L) > 140).count)
 
   carsDS.groupByKey(_.Origin).count().show()
+
+  carsDS.select(col("Name")).show(10, false)
+
+  println(carsDF.columns)
 
 }
