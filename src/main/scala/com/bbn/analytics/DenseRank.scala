@@ -12,7 +12,7 @@ object DenseRank extends App {
     .getOrCreate()
 
 
-  val path = "/home/thesnibibin/Desktop/LearningSparkV2/databricks-datasets/learning-spark-v2/flights"
+  val path = "/home/**/Desktop/LearningSparkV2/databricks-datasets/learning-spark-v2/flights"
   val delayPath = s"$path/departuredelays.csv"
   val airportCodePath = s"$path/airport-codes-na.txt"
 
@@ -64,5 +64,14 @@ object DenseRank extends App {
       |) t
       |WHERE rank <= 3""".stripMargin).show()
 
+  def printConfigs(session: SparkSession) = {}
+  val mconf = spark.conf.getAll
+  for (k <- mconf.keySet) {
+    println(s"${k} -> ${mconf(k)}\n")
+  }
+
+  spark.sql("set -v")
+    .select("key", "value")
+    .show(5, false)
 
 }

@@ -5,7 +5,7 @@ import org.apache.spark.sql.functions._
 
 object Joins extends App {
 
-  val path = "/home/Desktop/"
+  val path = "/home/**/Desktop/"
   val inputGuitarFile = "guitarPlayers.json"
   val inputBandsFile = "bands.json"
 
@@ -34,6 +34,12 @@ object Joins extends App {
       .selectExpr("Band.id as id", "Band.name as name", "Band.hometown as hometown", "band.year as year")
 
     val joinedDf = streamedDf.join(guitarPlayersDf, guitarPlayersDf.col("Band") === streamedDf.col("id"), "inner")
+
+    println(joinedDf.explain("simple"))
+//    println(joinedDf.explain("extended"))
+//    println(joinedDf.explain("codegen"))
+//    println(joinedDf.explain("cost"))
+//    println(joinedDf.explain("formatted"))
 
     joinedDf.writeStream
       .format("console")
