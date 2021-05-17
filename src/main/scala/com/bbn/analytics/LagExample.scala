@@ -5,12 +5,12 @@ import org.apache.spark.sql.functions._
 
 object LagExample extends App {
 
-  val path = "/home/Desktop"
+  val path = "/home/"
   val input_csv = "cars.json"
 
   val spark = SparkSession.builder()
     .appName("LagAnalyticalFuncTest")
-    .config("spark.master", "local")
+    .config("spark.master", "local[1]")
     .getOrCreate()
 
   def readDF(filename: String) = spark.read
